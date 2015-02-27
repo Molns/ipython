@@ -21,6 +21,7 @@ import sys
 import threading
 import time
 import webbrowser
+import ssl
 
 
 # check for pyzmq 2.1.11
@@ -714,6 +715,10 @@ class NotebookApp(BaseIPythonApplication):
         else:
             ssl_options = None
         self.web_app.password = self.password
+        
+        # Disable SSLv3, since its use is discouraged.
+        ssl_options['ssl_version']=ssl.PROTOCOL_TLSv1
+
         self.http_server = httpserver.HTTPServer(self.web_app, ssl_options=ssl_options,
                                                  xheaders=self.trust_xheaders)
         if not self.ip:
